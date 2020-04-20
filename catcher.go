@@ -1,26 +1,28 @@
 package catcher
 
-func Wrap(code int, err error) error {
-	return wrapToStackError(3, code, err)
+const BaseSkip int = 3
+
+func Wrap(code int, err error) Frame {
+	return wrapToStackError(BaseSkip, code, err)
 }
 
-func WrapString(code int, err string) error {
-	return wrapStringToStackError(3, code, err)
+func WrapString(code int, err string) Frame {
+	return wrapStringToStackError(BaseSkip, code, err)
 }
 
-func WrapCode(code int) error {
-	return wrapCodeToStackError(3, code)
+func WrapCode(code int) Frame {
+	return wrapCodeToStackError(BaseSkip, code)
 }
 
-func WrapN(skip, code int, err error) error {
+func WrapN(skip, code int, err error) Frame {
 	return wrapToStackError(skip, code, err)
 }
 
-func WrapStringN(skip, code int, err string) error {
+func WrapStringN(skip, code int, err string) Frame {
 	return wrapStringToStackError(skip, code, err)
 }
 
-func WrapCodeN(skip, code int) error {
+func WrapCodeN(skip, code int) Frame {
 	return wrapCodeToStackError(skip, code)
 }
 
@@ -39,6 +41,10 @@ func FromError(err error) (Frame, bool) {
 		return nil, false
 	}
 	return FromString(err.Error())
+}
+
+func StackFromBytes(s []byte) (fs Frames, ok bool) {
+	return StackFromString(string(s))
 }
 
 func StackFromString(s string) (fs Frames, ok bool) {

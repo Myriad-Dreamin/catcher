@@ -1,7 +1,7 @@
 package catcher
 
 import (
-	"fmt"
+	"log"
 	"strconv"
 )
 
@@ -10,7 +10,7 @@ func atoi(s string) int {
 	if err != nil {
 		c = CodeDeserializeError
 		if reportBad {
-			fmt.Println(err)
+			log.Print(err)
 		}
 	}
 	return c

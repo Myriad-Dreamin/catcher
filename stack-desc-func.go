@@ -57,11 +57,22 @@ func funcFromString(s string) Func {
 	return Func{}
 }
 
+var hideFuncPos = true
+
+func SetHideFuncPos(h bool) {
+	hideFuncPos = h
+}
+
 func (f Func) Rel(pack string, rel string) (string, error) {
-	r2, err := filepath.Rel(rel, f.File)
-	if err != nil {
-		return "", err
+	if hideFuncPos {
+		return fmt.Sprintf("%s",
+			strings.TrimPrefix(strings.TrimPrefix(f.Name, pack), "/")), nil
+	} else {
+		r2, err := filepath.Rel(rel, f.File)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("<%s,%s:%d>",
+			strings.TrimPrefix(strings.TrimPrefix(f.Name, pack), "/"), r2, f.Line), nil
 	}
-	return fmt.Sprintf("<%s,%s:%d>",
-		strings.TrimPrefix(strings.TrimPrefix(f.Name, pack), "/"), r2, f.Line), nil
 }
